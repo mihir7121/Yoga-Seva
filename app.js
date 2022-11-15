@@ -18,6 +18,14 @@ app.get('', function(req,res) {
     res.render('index');
 });
 
+app.get('/pickpose', function(req,res) {
+    res.render('pickpose');
+});
+
+app.get('/practice', function(req,res) {
+    res.render('practice');
+});
+
 server.listen(PORT, function(err){
     console.log(`Server is listening on http://localhost:${PORT}`)
 });

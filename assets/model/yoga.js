@@ -65,18 +65,18 @@ function setup() {
 
   brain = ml5.neuralNetwork(options);
 
-  const architecture = fetch('model/model.json',{
-    mode: 'cors',
-    credentials: 'include',
-    method: 'GET',
-    headers: headers,
-    cache: 'default',
-  }).then(response => response.json())
-    .then(json => console.log(json))
-    .catch(error => console.log('NHK: ' + error.message));
+  // const architecture = fetch('model/model.json',{
+  //   mode: 'cors',
+  //   credentials: 'include',
+  //   method: 'GET',
+  //   headers: headers,
+  //   cache: 'default',
+  // }).then(response => response.json())
+  //   .then(json => console.log(json))
+  //   .catch(error => console.log('NHK: ' + error.message));
     
   const modelDetails = {
-    model: architecture,
+    model: 'model/model.json',
     metadata: 'model/model_meta.json',
     weights: 'model/model.weights.bin'
   };
@@ -129,7 +129,7 @@ function loadUserTrainer() {
   else {
     img_format = ".svg";
   }
-  img_path = "imgs/" + pose_name + img_format;
+  img_path = "/img/" + pose_name + img_format;
   $(".trainer-img").attr("src", img_path);
 }
 
@@ -213,7 +213,7 @@ function classifyPose() {
     console.log("Input here");
     //Gets the points to classify
     brain.classify(inputs, gotResult);
-
+    
     // get the error for each angles collected
     calculateError(inputs);
   }
@@ -259,6 +259,7 @@ function calculateError(anglesArr) {
     // display score to user (overall accuracy estimate)
     finalScore = (score / anglesArr.length) * 100;
     finalScore = Math.round(finalScore * 10) / 10;
+    console.log(finalScore);
     $('.accuracy').text(finalScore + " %");
   }
 
@@ -346,6 +347,7 @@ function gotResult(error, results) {
     console.log("Results here: " + results);
     if (results[0].confidence > 0.75) {
       label = results[0].label;
+      console.log(label);
       if (label === currentPose) {
         poseResult = currentPose;
       } else {
@@ -353,9 +355,9 @@ function gotResult(error, results) {
       }
     }
   }
-  // console.log("classifying again");
+  console.log("classifying again");
   // // after first classification, you want to keep classifying for new poses
-  // classifyPose();
+  classifyPose();
 }
 
 function gotPoses(poses) {

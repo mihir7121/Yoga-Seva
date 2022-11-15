@@ -3,4 +3,4 @@
 How to get started:
 
 - install the required modules
-- node app
+- Run the command "node app"

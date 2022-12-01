@@ -18,6 +18,10 @@ app.get('', function(req,res) {
     res.render('index');
 });
 
+app.get('/start', function(req,res) {
+    res.render('pickpose');
+});
+
 app.get('/pickpose', function(req,res) {
     res.render('pickpose');
 });

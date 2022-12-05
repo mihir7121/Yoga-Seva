@@ -161,9 +161,9 @@ app.post("/start", isLoggedIn, function (req, res) {
     a /= 4;
     console.log(a);
     console.log(typeof a);
-    if (a < 70)
+    if (a < 60)
         var description = "Beginner";
-    else if (a >= 70 && a < 85)
+    else if (a >= 60 && a < 85)
         var description = "Intermediate";
     else
         var description = "Expert";

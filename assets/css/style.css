@@ -130,3 +130,9 @@ td {
     text-align: center;
     font-size: 5rem;
 }
+
+.avg-accuracy {
+    margin: auto;
+    text-align: center;
+    font-size: 5rem;
+}

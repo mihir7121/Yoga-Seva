@@ -1,4 +1,3 @@
-// live code here
 let video;
 let poseNet;
 let pose;
@@ -19,7 +18,10 @@ let currentPose = "";
 let poseResult = "";
 let canvas;
 let flagged = [];
+let average_score = [];
+let final_average_score = 0;
 let timer = 5;
+let count = 0;
 let sessionTimer = false;
 let finishedStatus = "Finished";
 
@@ -56,6 +58,8 @@ function setup() {
     setInterval(decrease, 1000);
   });
 
+
+
   let options = {
     inputs: 14,
     outputs: numOutputs,
@@ -74,7 +78,7 @@ function setup() {
   // }).then(response => response.json())
   //   .then(json => console.log(json))
   //   .catch(error => console.log('NHK: ' + error.message));
-    
+
   const modelDetails = {
     model: 'model/model.json',
     metadata: 'model/model_meta.json',
@@ -85,7 +89,7 @@ function setup() {
 }
 
 function decrease() {
-  if (sessionTimer === false) {
+  if (count ==0 && sessionTimer === false) {
     if (timer > 0) {
       timer--;
       $("#time-remaining").text("Starting in: " + timer + "s");
@@ -99,6 +103,14 @@ function decrease() {
       timer--;
       $("#time-remaining").text("Time left: " + timer + "s");
     } else {
+      for(let i=0;i<average_score.length;i++){
+        final_average_score += average_score[i];
+      }
+      final_average_score /= average_score.length;
+      final_average_score = Math.round(final_average_score * 10) / 10;
+      sessionTimer = false;
+      count++;
+      $('.avg-accuracy').text(final_average_score + " %");
       $("#time-remaining").text(finishedStatus);
     }
   }
@@ -134,7 +146,6 @@ function loadUserTrainer() {
 }
 
 function brainLoaded() {
-  console.log('pose classification model ready');
   // if model is ready, then you can begin classification
   classifyPose();
 }
@@ -142,7 +153,7 @@ function brainLoaded() {
 function getUserPose() {
   // get user selected pose
   currentPose = localStorage.getItem('SelectedPose');
-  console.log(currentPose);
+  // console.log(currentPose);
   if (currentPose === "Warrior-2") {
     currentPose = currentPose.split("-")[0];
     currentPose = currentPose + " 2";
@@ -209,11 +220,11 @@ function classifyPose() {
     inputs.push(lShoulder_lHip_lWrist);
     inputs.push(rShoulder_rHip_rWrist);
 
-    console.log(inputs);
+    // console.log(inputs);
     console.log("Input here");
     //Gets the points to classify
     brain.classify(inputs, gotResult);
-    
+
     // get the error for each angles collected
     calculateError(inputs);
   }
@@ -259,7 +270,8 @@ function calculateError(anglesArr) {
     // display score to user (overall accuracy estimate)
     finalScore = (score / anglesArr.length) * 100;
     finalScore = Math.round(finalScore * 10) / 10;
-    console.log(finalScore);
+    average_score.push(finalScore);
+    // console.log(finalScore);
     $('.accuracy').text(finalScore + " %");
   }
 
@@ -319,7 +331,7 @@ function setFlaggedPoints(errArray) {
           arr = [6, 12, 10, 0];
           break;
         default:
-          console.log("Should not come here");
+        // console.log("Should not come here");
       }
       flagged.push(arr);
     }
@@ -344,10 +356,10 @@ function gotResult(error, results) {
   if (error) {
     console.log(error);
   } else {
-    console.log("Results here: " + results);
+    // console.log("Results here: " + results);
     if (results[0].confidence > 0.75) {
       label = results[0].label;
-      console.log(label);
+      // console.log(label);
       if (label === currentPose) {
         poseResult = currentPose;
       } else {
@@ -355,7 +367,7 @@ function gotResult(error, results) {
       }
     }
   }
-  console.log("classifying again");
+  // console.log("classifying again");
   // // after first classification, you want to keep classifying for new poses
   classifyPose();
 }
@@ -385,7 +397,7 @@ function drawPose() {
     let a = skeleton[i][0]; //skeleton is a 2D array, the second dimension holds the 2 locations that are connected on the keypoint
     let b = skeleton[i][1];
     stroke(255);
-    strokeWeight(10);
+    strokeWeight(5);
     line(a.position.x, a.position.y, b.position.x, b.position.y);
   }
   // overwrite the lines that are flagged as error
@@ -404,7 +416,8 @@ function drawPose() {
       let x3 = pose.keypoints[idx3].position.x;
       let y3 = pose.keypoints[idx3].position.y;
 
-      strokeWeight(10);
+
+      strokeWeight(5);
       stroke(255, 0, 0);
       line(x1, y1, x2, y2);
       line(x1, y1, x3, y3);

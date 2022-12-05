@@ -30,7 +30,7 @@
         </div>
         <div class="trainer" id='trainer'>
             <div>
-                <h1 id="time-remaining">Starting in: 5s</h1>
+                <h1 id="time-remaining" onchange="checkStatus()">Starting in: 5s</h1>
             </div>
             <div>
                 <h2>Reference Yoga Trainer:</h2>
@@ -43,12 +43,16 @@
             <h2 class="feedback-header">Feedback for user:</h2>
             <h3 class="score">User Pose Accuracy:</h3>
             <p class="accuracy">0 %</p>
+            <h3 class="score">Average Accuracy:</h3>
+            <p class="avg-accuracy">0 %</p>
             <p class="feedback-description">Individual Calculated Angles</p>
             <table>
                 <tr>
                     <th>Targetted Joints</th>
-                    <th>Angle formed by left joints</th>
-                    <th>Angle formed by right joints</th>
+                    <th>Angle (left joints)</th>
+                    <th>Angle (right joints)</th>
+                    <th>Target (left joints)</th>
+                    <th>Target (right joints)</th>
                 </tr>
                 <tr>
                     <td>Knee, Ankle, Hip</td>
@@ -92,9 +96,26 @@
     <div class="homepage-btn">
         <a href="#" class="button" id="start-btn">Start</a>
         <!-- <a href="index.html" class="button">Homepage</a> -->
+        <a href="#" class="save button" id="Save"">Save</a>
+        <form action="/practice2" method="POST" style="display:inline;">
+            <input type="hidden" class="accuracy_mountain" name="accuracy_mountain">
+            <input class="button tree-img" id="Tree" type="submit" value="Next">
+        </form>
         <a href="/pickpose" class="button">Back</a>
+
     </div>
     <script src="../model/yoga.js" charset="utf-8"></script>
+    <script>
+        $(".save").on('click', function () {
+            var percent = $(".avg-accuracy").text().split(" ");
+            $(".accuracy_mountain").attr("value", percent[0]);
+            console.log($(".accuracy_mountain").attr("value"));
+        });
+        $(".tree-img").on('click', function () {
+            yogaPose = $("#Tree").attr("id");
+            localStorage.setItem('SelectedPose', yogaPose);
+        });
+    </script>
 </body>
 
 </html>

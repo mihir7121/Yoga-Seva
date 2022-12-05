@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Yoga Reports for <%- name %>
+    </h1>
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Mountain Pose</th>
+            <th>Tree Pose</th>
+            <th>Goddess Pose</th>
+            <th>Warrior Pose</th>
+            <th>Total Accuracy</th>
+            <th>Yoga Fitness Level(Beginner/Intermediate/Expert)</th>
+        </tr>
+        <% userStats.forEach(function(stats){%>
+            <tr>
+                <td>
+                    <%= stats.date%>
+                </td>
+                <td>
+                    <%= stats.accuracy_mountain %>%
+                </td>
+                <td>
+                    <%= stats.accuracy_tree %>%
+                </td>
+                <td>
+                    <%= stats.accuracy_goddess %>%
+                </td>
+                <td>
+                    <%= stats.accuracy_warrior_2 %>%
+                </td>
+                <td>
+                    <%= stats.accuracy %>%
+                </td>
+                <td>
+                    <%= stats.description %>
+                </td>
+            </tr>
+            <% }); %>
+
+    </table>
+
+    <div><a href="/start" class="button">Back</a></div>
+
+
+</body>
+
+</html>
